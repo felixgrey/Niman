@@ -1,0 +1,137 @@
+
+/*************************************************/
+
+JarKaiScroll构造器
+@param {Object} outDom 容器元素
+@param {Object} inDom 页面元素
+
+var jarKaiScroll=new JarKaiScroll(outDom,inDom);
+
+/*************************************************/
+
+jarKaiScroll.destroy
+
+销毁对象
+
+/*************************************************/
+
+jarKaiScroll.nextPage
+
+设置触发读取下一页的位置
+@param {Object} type 滚动方向bottom|right
+@param {Object} threshold 触发位置
+@param {Object} callback 回调函数
+
+//在距离页面底部200px时调用回调函数
+jarKaiScroll.nextPage('bottom',200,function(reset){
+
+	//触发一次读取数据效果后不再触发，直到执行reset方法，通常在新数据渲染结束后执行此方法
+	reset();
+})
+
+/*************************************************/
+
+jarKaiScroll.resetState
+
+强制重置状态，监听下一页事件
+
+jarKaiScroll.resetState()
+
+/*************************************************/
+
+jarKaiScroll.zoomTo
+
+缩放
+@param {Object} zoom 缩放比例
+@param {Object} time 动画时间
+@param {Object} oldZoomFun 是否采用普通动画，默认是CSS3动画
+
+jarKaiScroll.zoomTo(0.5,200);
+
+/*************************************************/
+
+jarKaiScroll.showScroll
+
+显示滚动条
+@param {Object} x 显示水平滚动条
+@param {Object} y 显示垂直滚动条
+
+jarKaiScroll.showScroll(true,true);
+
+/*************************************************/
+
+jarKaiScroll.scrollTo
+
+滚动到目标位置
+@param {Object} x X轴
+@param {Object} y Y轴
+@param {Object} time 时间
+
+jarKaiScroll.scrollTo(0,100,100);
+
+/*************************************************/
+
+jarKaiScroll.scrollToElement
+
+滚动到某个元素
+@param {Object} index 序号
+@param {Object} time 时间
+
+jarKaiScroll.scrollToElement(2,200);
+
+/*************************************************/
+
+jarKaiScroll.padding
+
+设置边框空白
+@param {Object} top
+@param {Object} right
+@param {Object} bottom
+@param {Object} left
+
+jarKaiScroll.padding(0,0,0,0);
+
+/*************************************************/
+
+jarKaiScroll.on
+
+监听事件
+@param {Object} evtName
+@param {Object} scope
+@param {Object} callback
+
+jarKaiScroll.on('click',null,function(){});
+
+/*************************************************/
+
+jarKaiScroll.un
+
+解除监听
+@param {Object} evtName
+@param {Object} scope
+@param {Object} callback
+
+jarKaiScroll.un('click',null,fun);
+
+/*************************************************/
+
+jarKaiScroll.reflush
+
+刷新，重新初始化
+
+jarKaiScroll.reflush();
+
+/*************************************************/
+
+事件
+
+$scrolling
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,24 @@
+/*************************************************/
+
+元素增加拖拽功能
+
+NimanEvents.listen('div').buildDragger();
+
+/*************************************************/
+
+NEvents.forMobileDragger
+
+移动端拖拽，取消Dom touchstart默认动作
+@param {Object} on 打开或关闭 true|false
+@param {Object} dom 取消的默认动作dom,默认document
+
+NEvents.forMobileDragger(true,dom);
+
+/*************************************************/
+
+拖拽事件
+$dragstart
+$dragging
+$dragend
+$inertiaend
+

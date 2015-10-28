@@ -1,0 +1,56 @@
+
+var nRouter=NRouter()
+
+/*************************************************/
+
+nRouter.route
+
+@param {Object} url 跳转的URL
+@param {Object} from 起始方向 left|right|top|bottom 默认right
+@param {Object} time 动画时间
+
+nRouter.route('/main','left',200);
+
+/*************************************************/
+
+nRouter.setDefaultUrl
+
+设置默认URL，未明确指定URL时跳转到这个URL
+@param {Object} defaultUrl 默认URL
+
+nRouter.setDefaultUrl('/main');
+
+/*************************************************/
+
+nRouter.addRouteMap
+
+增加路由表
+@param {Object} matchUrl 匹配的URL
+@param {Object} obj 操作列表
+
+nRouter.addRouteMap('/main',{
+	firstAppend:function(container,url){
+		//container 容器元素
+		//url 当前url
+	},
+	afterAppend:function(container,url){	
+	},
+	firstShow:function(container,url){	
+	},
+	afterShow:function(container,url){	
+	},
+	beforeRemove:function(container,url){	
+	}
+});
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,103 @@
+
+/*************************************************/
+
+Promise
+
+与Chrome内置的Promise对象兼容，当浏览器内置Promise时使用内置的Promise，没有时使用js实现。
+
+@param {Object} callback 回调函数
+
+var promise=new Promise(function(resolve,reject){
+
+	//异步调用成功后的回调
+	resolve('data text')
+	//异步调用失败后回调
+	reject('err text');
+
+});
+
+promise.then(function(data){
+	//异步调用成功后执行本函数，显示data text
+	consoleo.log(data);		
+}).catch(function(err){
+	//异步调用失败或抛出异常后执行本函数。
+	consoleo.log(err);	
+});
+
+/*************************************************/
+
+Promise.resolve
+
+生成一个resolved状态的Promise对象
+
+@param {Object} data 返回成功数据
+
+var promise=Promise.resolve('data text');
+
+promise.then(function(data){
+	//显示data text
+	consoleo.log(data);		
+});
+
+/*************************************************/
+
+Promise.reject
+
+生成一个rejected状态的Promise对象
+
+@param {Object} err 返回错误信息
+
+var promise=Promise.reject('data text');
+
+promise.catch(function(err){
+	consoleo.log(err);		
+});
+
+/*************************************************/
+
+Promise.all
+
+返回一个对象，当Promise数组中所有的Promise对象都是resolved状态时，此对象置为resolved状态
+
+@param {Object} promiseList
+
+var promiseList=[];
+
+for(var i=0;i<3;i++){
+	promiseList.push(Promise.resolve('data_'+i));
+}
+
+var promise=Promise.all(promiseList);
+
+promise.then(function(data){	
+	//data是一个数组，值['data_0','data_1','data_2'];
+	console.log(data)
+});
+
+/*************************************************/
+
+Promise.race
+
+返回一个对象，当Promise数组中任意一个Promise对象状态是resolved状态时，此对象置为resolved状态；
+当Promise数组中任意一个Promise对象状态是reject状态时，此对象置为reject状态。
+
+var promiseList=[];
+
+for(var i=0;i<3;i++){
+	promiseList.push(Promise.resolve('data_'+i));
+}
+
+var promise=Promise.all(promiseList);
+
+promise.then(function(data){	
+	//data是第一个状态为resolved的Promise对象的返回值，值data_0
+	console.log(data)
+});
+
+/*************************************************/
+
+Promise.cast
+
+返回一个对象，当参数是类Promise对象时，返回Promise对象，
+当参数是其他数据时，等价于Promise.resolve
+

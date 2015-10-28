@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script type="text/javascript" src="../../Niman/modules/NViewModel.js"></script>
+	</head>
+
+	<body>
+		<ul data-bind="each:list1;" id="view1">
+			<li>
+				<select data-bind="each:$root.list2;">
+					<option data-bind='text:;value:'>
+
+					</option>
+				</select>
+			</li>
+		</ul>
+
+		<ul data-bind="each:list1;" id="view2">
+			<li>
+				<select data-bind="each:list2;">
+					<option data-bind='text:;value:'>
+
+					</option>
+				</select>
+			</li>
+		</ul>
+		<ul data-bind="each:list1;" id="view3">
+			<li data-bind='text:;'>
+			</li>
+		</ul>
+		<script>
+			var viewModel1 = new NimanViewModel('view1');
+			var model1 = viewModel1.buildModel({
+				list1: [{}, {}, {}],
+				list2: [
+					1, 2, 3
+				]
+			})
+			 console.log( model1.list1.length);
+			 model1.list1.splice(0,1,{},{});
+			 
+			var viewModel2 = new NimanViewModel('view2');
+			var model2 = viewModel2.buildModel({
+				list1: [{
+					list2: [
+						1, 2, 3
+					]
+				}, {
+					list2: [
+						4, 5, 6
+					]
+				}, {
+					list2: [
+						7, 8, 9
+					]
+				}]
+			});
+			model2.list1.splice(1, 1, 
+				{
+					list2: [
+						11, 12, 13
+					]
+				}
+			);
+			console.log(viewModel2.domList);
+			
+			var viewModel3 = new NimanViewModel('view3');
+			var model3 = viewModel3.buildModel({
+				list1: [
+					1, 2, 3
+				]
+			})
+			console.log(viewModel3.domList);
+		</script>
+	</body>
+
+</html>

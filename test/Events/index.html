@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1, maximum-scale=1, user-scalable=no">
+		<script type="text/javascript" src="../../Niman/modules/NEvents.js"></script>
+		<script type="text/javascript" src="../../Niman/modules/Dragger.js"></script>
+		<style>
+			#inner {
+				border: solid red 1px;
+				width: 100px;
+				height: 100px;
+			}
+			#text {
+				position: absolute;
+				bottom: 0px;
+				width: 100%;
+				height: 50%;
+				border: solid black 1px;
+			}
+			button{
+				width: 100px;
+				height: 100px;
+				border-radius: 0px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id='container'>
+			<div id='inner'>
+
+			</div>
+		</div>
+		<button id='button'>
+			aaa
+		</button>
+		<div id='text'>
+
+		</div>
+		<script>
+		
+		
+			var button = NimanEvents.listen('button');
+			
+			button.on('$click',null,function(){
+					var div = document.getElementById("text");
+						div.innerHTML +='click button <br/>'
+			})
+		
+			 NimanEvents.forMobileDragger(true);
+			var events = NimanEvents.listen('inner');
+			
+			
+			 //events.buildDragger();
+			var eventsList = [
+			//'touchstart', 'touchend','$up','mousedown','mousemove','mouseup','mouseover',
+			'click'];
+			for (var i = 0; i < eventsList.length; i++) {
+				! function(_i) {
+					var _name = eventsList[_i];
+					events.on(_name, null, function(evt) {
+						var div = document.getElementById("text");
+						div.innerHTML += _name+':'+evt.type + '<br/>'
+					});
+				}(i);
+			}
+			
+			
+			
+			var ecentName = '$click';
+			events.on(ecentName, null, function() {
+				var div = document.getElementById("inner");
+				div.innerHTML += ecentName + '<br/>'
+			});
+		</script>
+	</body>
+
+</html>

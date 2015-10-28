@@ -1,0 +1,114 @@
+
+/*************************************************/
+
+绑定命令
+
+data-bind:
+
+text 绑定文本
+html 绑定HTML
+textTemplate 绑定文本模版，模版格式 ${name}
+htmlTemplate 绑定HTML模版，模版格式 ${name}
+value 绑定value属性
+attr 绑定attribute: data-bind:{id:id}
+style 绑定style: data-bind:{display:display}
+prop 绑定属性
+event 绑定事件
+fun 绑定函数，最优先，可以中断后续绑定和DOM扫描
+each 绑定数组
+with 设定上下文
+
+绑定路径
+$root 根结点
+$parent 父节点
+
+计算值绑定
+function(dom,type,value){
+}
+
+/*************************************************/
+
+var viewModel=new NViewModel('domId');
+
+/*************************************************/
+
+viewModel.buildModel
+
+建立模型，返回数据模型，该模型中的数据发生变化视图会随之刷新。在IE9+版本生效。
+低于IE9将返回数据本身。
+
+var model=viewModel.buildModel({prop:''});
+
+/*************************************************/
+
+viewModel.bind
+
+绑定数据
+
+viewModel.bind({});
+
+/*************************************************/
+
+viewModel.getDataInfo
+
+获取dom绑定的数据相关信息
+
+var info=viewModel.getDataInfo(dom);
+
+info:{
+	basePath:dom绑定数据的路径,若dom绑定的是对象的某个属性，此处返回对象路径。
+	path：dom绑定数据的路径
+	index:如果在数组中，数据所在序列
+}
+
+/*************************************************/
+
+viewModel.reflush
+
+刷新，可以局部dom刷新
+
+viewModel.reflush(dom);
+
+/*************************************************/
+
+viewModel.reflushWhenOld
+
+如果是旧Ie，则刷新，用于modol无法自动刷新
+
+viewModel.reflushWhenOld();
+
+/*************************************************/
+
+viewModel.getValue
+
+获取dom绑定的数据
+
+var data=viewModel.getValue(dom);
+
+/*************************************************/
+
+viewModel.destroy
+
+销毁实体
+
+viewModel.destroy();
+
+/*************************************************/
+dom.ignore 忽略的DOM
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

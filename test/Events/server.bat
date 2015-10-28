@@ -1,0 +1,1 @@
+supervisor ../../server/server.js

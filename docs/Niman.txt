@@ -1,0 +1,151 @@
+
+/*************************************************/
+
+Niman.define
+
+定义一个模块
+@param {Object} name 模块名
+@param {Object} dependencies 依赖模块
+@param {Object} fun模块定义
+
+Niman.define('module', ['dependency1','dependency2'], function(contextObj){
+	//contextObj用于模块间通信
+});
+
+/*************************************************/
+
+Niman.plugin
+
+定义一个插件
+@param {Object} name 插件名
+@param {Object} dependencies 依赖模块
+@param {Object} fun 插件定义
+
+Niman.plugin('plugin', ['dependency1','dependency2'], function(info){
+	/*info包含了Niman的相关信息
+	
+		info={
+			//载入的配置信息
+			config: {
+				plugin: [],
+				location: {}
+			},
+			//页面加载配置
+			getPagePolicy: {},
+			//延迟动作
+			StateAction: StateAction,
+			//页面载入动作
+			windowLoadState: new StateAction,
+			//是否旧Ie
+			isOldIE: false,
+			//系统上下文，通常是window对象
+			global: ctx,
+			//模块上下文
+			context: {},
+			//Js加载函数
+			getJs: getJs,
+			//模块表
+			moduleMap: moduleMap,
+			//模块工厂
+			moduleFactory: moduleFactory,
+			//模块加载器
+			moduleLoader: moduleLoader,
+			//head元素
+			head: head,
+			//当前script元素
+			currentScript: currentScript
+		}
+	
+	*/
+	
+	this.stop = false;
+	
+});
+
+/*************************************************/
+
+Niman.use
+
+使用一个模块
+@param {Object} name 模块名
+@param {Object} cbk 模块载入后的回调，可选
+
+Niman.use('module', function(){
+	console.log('module loaded');
+});
+
+/*************************************************/
+
+Niman.config
+
+配置，调用此方法载入配置信息并初始化。
+@param {Object} obj 配置信息
+
+Niman.config({
+	//载入的插件
+	plugin: ['NCombinationPlugin', 'Text', 'CSS'],
+	//预载入模块
+	preload: ['NEvents', 'NRouter',
+		'NAjax', 'NDomQuery', 'NPromise',
+		'NUtils', 'NViewModel', 'Dragger'
+	],
+	//主模块（可选，HTML元素内优先）
+	main:'index',	
+	//模块路径
+	location: {
+		//功能整合插件
+		NCombinationPlugin:"/NCombination.js",
+		//文本模版加载插件
+		Text:'/Text.js',
+		//CSS加载插件
+		CSS:'/CSS.js',
+		
+		//事件管理模块
+		NEvents:"/NEvents.js",
+		//路由模块
+		NRouter:"/NRouter.js",
+		//Ajax模块
+		NAjax:"/NAjax.js",
+		//Dom检索模块
+		NDomQuery:"/NDomQuery.js",
+		//Promise模块
+		NPromise:"/NPromise.js",
+		//工具包
+		NUtils:"/NUtils.js",
+		//ViewModel框架
+		NViewModel:"/NViewModel.js",
+		//拖拽事件
+		Dragger:"/Dragger.js",
+		//手势指令模块
+		Gesture:"/Gesture.js",
+		//滚动条模块
+		Scroll:"/UI/Scroll.js"
+});
+
+/*************************************************/
+
+define和require.async
+
+define
+
+CommonJS模块定义
+@param {Object} module
+
+require.async
+
+异步加载模块
+@param {Object} moduleList 加载模块列表
+@param {Object} callback 加载后的回调
+
+define(function(require, exports, module) {
+	var Scroll=require('Scroll');
+	module.exports = {};
+	
+	//异步加载模块
+	require.async(['Gesture','NDomQuery'],function(){
+		console.log('after loaded');
+	});
+	
+});
+
+/*************************************************/

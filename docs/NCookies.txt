@@ -1,0 +1,27 @@
+
+/*************************************************/
+
+NimanCookies.set
+
+Cookies写操作
+
+NimanCookies.set('key',value);
+
+/*************************************************/
+
+NimanCookies.get
+
+Cookies读操作
+
+NimanCookies.get('key') //返回value
+
+/*************************************************/
+
+NimanCookies.getCookieVal
+
+Cookies读操作，返回字符串
+
+NimanCookies.getCookieVal('key') //返回key=value
+
+
+
