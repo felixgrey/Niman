@@ -11,7 +11,7 @@ Niman相关：http://starwars.wikia.com/wiki/Form_VI:_Niman
 
 Jar'Kai相关：http://starwars.wikia.com/wiki/Jar%27Kai
 
-##版本：0.1
+##版本：0.1 
 
 0.2版将采用全新的开发工具和软件结构，并且不再支持旧浏览器。
 0.2版开发项目：https://github.com/felixgrey/NimanLib
