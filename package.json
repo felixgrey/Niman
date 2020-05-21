@@ -14,5 +14,21 @@
   "bugs": {
     "url": "https://github.com/felixgrey/Niman/issues"
   },
-  "homepage": "https://github.com/felixgrey/Niman#readme"
+  "homepage": "https://github.com/felixgrey/Niman#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.7.7",
+    "@babel/core": "^7.7.7",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/plugin-proposal-decorators": "^7.7.4",
+    "@babel/preset-env": "^7.7.7",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "gulp": "^4.0.2"
+  }
 }
