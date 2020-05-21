@@ -24,13 +24,19 @@ function objFun() {
 
 function udFun() {}
 
+function errorLog(...args) {
+  global.console && global.console.error && global.console.error(...args);
+}
+
 export {
   isNvl,
   isEmpty,
   isBlank,
   isNoNum,
-  
+
   sameFun,
   objFun,
-  udFun
+  udFun,
+
+  errorLog
 }

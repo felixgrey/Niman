@@ -5,6 +5,7 @@ import {
   isBlank,
   sameFun,
   udFun,
+  errorLog,
 } from './../Utils';
 
 function createConfig(config, reducer) {
@@ -43,27 +44,17 @@ class Manager {
 
     this.onSetAction = sameFun;
 
-    const theReducer = (state, action) => {
-      if (typeof action === 'object' && action !== null && action.refManager === this && this.actionTypes[action.type]) {
-        if (this.chainLength) {
-          this.chainLength--;
-        }
 
-        return onSetAction(state, action);
-      }
-
-      return state;
-    }
-
+    let theReducer;
     if (config && config.reducer) {
-      this.reducer = (state, action) => {
-        return theReducer(config.reducer(state, action), action);
+      theReducer = (state, action) => {
+        return this.reducer(config.reducer(state, action), action);
       }
     } else {
-      this.reducer = theReducer;
+      theReducer = this.reducer.bind(this);
     }
 
-    this.config = createConfig(config, this.reducer);
+    this.config = createConfig(config, theReducer);
     this.dispatcher = this.config.dispatcher;
 
     if (!ReduxStoreLite.checkInterface(this.dispatcher)) {
@@ -84,6 +75,22 @@ class Manager {
       type: 'createManager',
       managerId: this.id
     });
+  }
+
+  reducer(state, action) {
+    if (this.isCallSet(action)) {
+      return this.onSetAction(state, action);
+    }
+
+    return state;
+  }
+
+  isCallSet(action) {
+    if (action === null || typeof action !== 'object') {
+      return false;
+    }
+
+    return action.info && action.info.refManager === this && this.actionTypes[action.type];
   }
 
   getActionType(name, myModelName = '') {
@@ -118,22 +125,32 @@ class Manager {
       this.lastState = this.dispatcher.getState();
     }
 
+    this.chainLength++；
+
     if (this.chainLength > this.config.maxChainLength) {
-      throw new Error('over maxChainLength');
+      errorLog('over maxChainLength');
+      return;
     }
 
     this.dispatcher.dispatch({
       type: this.getActionType(name, modelName),
-      refManager: this,
       payload: {
-        name,
-        value,
         data: {
           [name]: value
         },
-        info: {}
+        info: {
+          refManager: this,
+          field: name,
+          value,
+        }
       }
     });
+
+    this.chainLength--;
+
+    if (this.chainLength === 0) {
+      this.lastState = null;
+    }
   }
 
   getWatchState(args) {
@@ -169,10 +186,7 @@ class Manager {
     const callback = args.pop();
 
     const dispatch = this.dispatcher.dispatch.bind(dispatcher);
-    const set = (...args) => {
-      this.chainLength++;
-      return this.set(...args);
-    };
+    const set = this.set.bind(this);
 
     callback({
       ...this.getWatchState(args),
