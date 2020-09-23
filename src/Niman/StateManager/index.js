@@ -1,13 +1,13 @@
-import {
-  EventEmitter
-} from 'events';
+// import {
+//   EventEmitter
+// } from 'events';
 
-// const EventEmitter = require('events').EventEmitter
+const EventEmitter = require('events').EventEmitter
 
-const defaultMaxChangeTimes = 20;
-const defaultLag = 40;
+const defaultMaxChangeTimes = 10;
+const defaultLag = 20;
 
-export default
+// export default
 class StateManager extends EventEmitter {
 
   constructor(initState = {}) {
@@ -25,9 +25,9 @@ class StateManager extends EventEmitter {
     this.state = initState;
     this.maxChangeTimes = defaultMaxChangeTimes;
     this.lag = defaultLag;
-    this.lastRunOnChangeTime = 0;
     this.listenerList = [];
     this.emitQueue = [];
+    this.onChangeTimeoutIndex = -1;
     this.locked = false;
     this.emitting = false;
     this.destroyed = false;
@@ -99,7 +99,6 @@ class StateManager extends EventEmitter {
   insertListener(name, callback) {
 
     const eventHandle = {
-      id: Math.random(),
       name,
       callback,
     }
@@ -230,6 +229,7 @@ class StateManager extends EventEmitter {
 
     let lastState = null;
     let allData = {};
+    let onChangeTimeoutIndex = -1;
 
     const changeHandle = (info) => {
       if (this.destroyed) {
@@ -258,15 +258,12 @@ class StateManager extends EventEmitter {
       }
 
       const callback = () => {
+        clearTimeout(onChangeTimeoutIndex);
         if (this.destroyed) {
           return;
         }
 
-        if (this.onChangeTimeoutIndex !== -1) {
-          clearTimeout(this.onChangeTimeoutIndex);
-        }
-
-        this.onChangeTimeoutIndex = -1;
+        onChangeTimeoutIndex = -1;
 
         const lastState2 = lastState;
         const allData2 = allData;
@@ -285,21 +282,12 @@ class StateManager extends EventEmitter {
           map.$$all(allData2, lastState2, currentState, init, this);
         }
       }
-
-      const now = Date.now();
-
-      if (this.lastRunOnChangeTime - now <= this.lag) {
-        if (this.onChangeTimeoutIndex !== -1) {
-          clearTimeout(this.onChangeTimeoutIndex);
-        }
-
-        this.onChangeTimeoutIndex = setTimeout(callback, this.lag);
-      } else {
+      
+      if(init) {
         callback();
+      } else if (onChangeTimeoutIndex === -1) {
+        onChangeTimeoutIndex = setTimeout(callback, this.lag);
       }
-
-      this.lastRunOnChangeTime = now;
-
     }
 
     changeHandle({
@@ -387,92 +375,92 @@ class StateManager extends EventEmitter {
 
 ///////////////////////////////////////////////////
 
-// const stateManager = new StateManager();
+const stateManager = new StateManager();
 
 
-// stateManager.watch({
-//   $$all(data, old, state, init) {
-//     // console.log('watch ', data, old, state, init);
-//   },
-//   省(data, old, state, init) {
-//     if (!data) {
-//       stateManager.setState({
-//         市: null
-//       });
-//     } else if (data === '辽宁') {
-//       stateManager.setState({
-//         市: '沈阳'
-//       });
-//     } else if (data === '浙江') {
-//       stateManager.setState({
-//         市: '杭州'
-//       });
-//     }
-//   },
-//   市(data, old, state, init) {
-//     if (!data) {
-//       stateManager.setState({
-//         区: null
-//       });
-//     } else if (data === '沈阳') {
-//       stateManager.setState({
-//         区: '浑南'
-//       });
-//     } else if (data === '杭州') {
-//       stateManager.setState({
-//         区: '滨江'
-//       });
-//     }
+stateManager.watch({
+  $$all(data, old, state, init) {
+    console.log('watch：$$all ', data, old, state, init);
+  },
+  省(data, old, state, init) {
+    if (!data) {
+      stateManager.setState({
+        市: null
+      });
+    } else if (data === '辽宁') {
+      stateManager.setState({
+        市: '沈阳'
+      });
+    } else if (data === '浙江') {
+      stateManager.setState({
+        市: '杭州'
+      });
+    }
+  },
+  市(data, old, state, init) {
+    if (!data) {
+      stateManager.setState({
+        区: null
+      });
+    } else if (data === '沈阳') {
+      stateManager.setState({
+        区: '浑南'
+      });
+    } else if (data === '杭州') {
+      stateManager.setState({
+        区: '滨江'
+      });
+    }
 
-//   },
-//   区(data, old, state, init) {
-//     if (!data) {
-//       stateManager.setState({
-//         公司: null
-//       });
-//     } else if (data === '浑南') {
-//       stateManager.setState({
-//         公司: '东软'
-//       });
-//     } else if (data === '滨江') {
-//       stateManager.setState({
-//         公司: '网易'
-//       });
-//     }
-//   }
-// });
+  },
+  区(data, old, state, init) {
+    if (!data) {
+      stateManager.setState({
+        公司: null
+      });
+    } else if (data === '浑南') {
+      stateManager.setState({
+        公司: '东软'
+      });
+    } else if (data === '滨江') {
+      stateManager.setState({
+        公司: '网易'
+      });
+    }
+  }
+});
 
-// stateManager.onChange({
-//   $$all(data, old, state, init) {
-//     if (!init) {
-//       console.log('change ', data, old, state);
-//     } else {
-//       console.log('init ', data, old, state);
-//     }
-//   },
-//   公司(data, old, state, init) {
-//     console.log('公司 ', data, old, state, init);
-//   }
-// });
+stateManager.onChange({
+  $$all(data, old, state, init) {
+    if (!init) {
+      console.log('change：$$all  ', data, old, state);
+    } else {
+      console.log('init ', data, old, state);
+    }
+  },
+  公司(data, old, state, init) {
+    console.log('change：公司  ', data, old, state, init);
+  }
+});
 
-// stateManager.setState({
-//   省: '辽宁'
-// });
+stateManager.setState({
+  省: null
+});
 
-// setTimeout(() => {
-//   stateManager.setState({
-//     省: '浙江'
-//   });
-//   stateManager.setState({
-//     省: '辽宁'
-//   });
-// }, 0);
+setTimeout(() => {
+  stateManager.setState({
+    省: '浙江'
+  });
+  stateManager.setState({
+    省: '辽宁'
+  });
+},20);
 
-// setTimeout(() => {
-//   stateManager.setState({
-//     省: '浙江'
-//   });
-//   stateManager.setState({
-//     省: '辽宁'
-//   });
-// }, 50);
+setTimeout(() => {
+  stateManager.setState({
+    省: '辽宁'
+  });
+  stateManager.setState({
+    省: '浙江'
+  });
+}, 50);
