@@ -126,12 +126,21 @@ function initMeta(records = [], metaOrRecords = []) {
 }
 
 // 改变
- function updateRecords(records = [], field = null, value = null) {
-    if (field === null) {
+ function updateRecords(...args) {
+
+    let [records = [], field = null, value = null] = args;
+
+    if (args.length === 3, field === null) {
         return initRecords(records);
     }
 
-    const result = initRecords(records).map(record => {
+    let merge = false;
+
+    if (args.length === 2 && typeof field === 'object') {
+        merge = true;
+    }
+
+    let setFieldValue = function(record, field, value) {
         const status = record[statusField];
 
         // 用于保存原始数据
@@ -149,12 +158,42 @@ function initMeta(records = [], metaOrRecords = []) {
             delete status.old[field];
         }
 
+        record[field] = value;
+
         // 当前数据和初始数据相同，删除原始数据备份
         if (Object.keys(status.old).length === 0) {
             delete status.old;
         }
 
-        record[field] = value;
+        return record;
+    }
+
+    let setValue;
+
+    if (merge) {
+        setValue = function(record, value) {
+
+            for (let key in field) {
+                if (key === statusField || key === idField) {
+                    continue;
+                }
+                setFieldValue(record, key, field[key]);
+            }
+
+            return record;
+        }
+    } else {
+        setValue =  function(record) {
+            setFieldValue(record, field, value);
+            return record;
+        };
+    }
+
+
+    const result = initRecords(records).map(record => {
+
+        setValue(record);
+
         return record;
     });
 
@@ -756,8 +795,11 @@ $RM.chainMethods = chainMethods;
 $RM.endMethods = endMethods;
 
 
-exports.idField = idField;
-exports.default = $RM;
+export default  $RM;
+
+export {
+    idField
+}
 
 
 
