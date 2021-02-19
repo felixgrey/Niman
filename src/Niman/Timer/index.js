@@ -1,7 +1,4 @@
 const none = Function.prototype;
-const nowTime = Date.now();
-const pulseEventName = `__$$pulseEvent_${nowTime}__`;
-const destroyEventName = `__$$destroyEvent_${nowTime}__`;
 const errorLog = (process && process.env.NODE_ENV === 'development') ? console.error : none;
 
 const pulseSet = new Set();
