@@ -1,0 +1,15 @@
+
+.form .cell .el-input, 
+.form .cell .el-input-number,
+.form .cell .el-select
+{
+  width: 100%;
+  
+}
+
+.form .error .el-input__inner,
+.form .error.el-input__inner,
+.form.error .el-input__inner
+{
+   border: solid 1px  #f56c6c;;
+}
